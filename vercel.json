@@ -5,12 +5,11 @@
   "outputDirectory": "apps/web/dist",
   "functions": {
     "apps/api/src/vercel.ts": {
-      "runtime": "@vercel/node@3",
       "includeFiles": "apps/api/**"
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/apps/api/src/vercel.ts" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/api/:path*", "destination": "/apps/api/src/vercel.ts" },
+    { "source": "/((?!api).*)", "destination": "/index.html" }
   ]
 }
