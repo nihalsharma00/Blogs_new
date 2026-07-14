@@ -4,7 +4,7 @@ import { logAdminAction } from '../utils/auditLogger';
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
-    const { category, genre, search, tag, status = 'PUBLISHED', page = 1, limit = 10 } = req.query;
+    const { category, genre, search, tag, featured, status = 'PUBLISHED', page = 1, limit = 10 } = req.query;
     
     const pageNum = parseInt(page as string);
     const limitNum = parseInt(limit as string);
@@ -14,6 +14,7 @@ export const getPosts = async (req: Request, res: Response) => {
     if (category) where.category = { slug: category };
     if (genre) where.genre = { slug: genre };
     if (tag) where.tags = { some: { slug: tag } };
+    if (featured === 'true') where.isFeatured = true;
     if (search) {
       where.OR = [
         { title: { contains: search as string } },
@@ -39,8 +40,8 @@ export const getPosts = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: posts,
-      meta: {
+      data: {
+        posts,
         total,
         page: pageNum,
         limit: limitNum,
