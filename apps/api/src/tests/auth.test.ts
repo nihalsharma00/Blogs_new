@@ -68,11 +68,11 @@ describe('Authentication Integration Tests', () => {
     accessToken = res.body.data.accessToken;
 
     // Check if refresh token cookie is set
-    const cookies = res.headers['set-cookie'];
+    const cookies = res.headers['set-cookie'] as unknown as string[] | undefined;
     expect(cookies).toBeDefined();
     
     // Extract refresh token from cookie if needed for next tests
-    const refreshTokenCookie = cookies.find((c: string) => c.startsWith('refreshToken='));
+    const refreshTokenCookie = cookies!.find((c: string) => c.startsWith('refreshToken='));
     expect(refreshTokenCookie).toBeDefined();
   });
 

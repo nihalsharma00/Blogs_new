@@ -1,28 +1,16 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "buildCommand": "npx prisma generate --schema=apps/api/prisma/schema.prisma && npm run build -w apps/web",
   "outputDirectory": "apps/web/dist",
-  "builds": [
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/static-build"
-    },
-    {
-      "src": "apps/api/src/vercel.ts",
-      "use": "@vercel/node"
+  "functions": {
+    "apps/api/src/vercel.ts": {
+      "runtime": "@vercel/node@3",
+      "includeFiles": "apps/api/**"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/apps/api/src/vercel.ts"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/apps/web/dist/index.html"
-    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/apps/api/src/vercel.ts" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

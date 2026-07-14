@@ -66,3 +66,5 @@ service-account*.json
 
 # Miscellaneous
 *.local
+
+.vercel
