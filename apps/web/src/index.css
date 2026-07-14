@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Theme 1: Clean Light (Default) */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Theme 2: Editorial Dark */
+    --background: 0 0% 12%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 15%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 0 0% 80%;
+  }
+
+  .theme-forest {
+    /* Theme 3: Forest Calm */
+    --background: 140 30% 95%;
+    --foreground: 160 50% 15%;
+    --card: 140 25% 98%;
+    --card-foreground: 160 50% 15%;
+    --popover: 140 25% 98%;
+    --popover-foreground: 160 50% 15%;
+    --primary: 150 40% 35%;
+    --primary-foreground: 140 30% 98%;
+    --secondary: 130 20% 85%;
+    --secondary-foreground: 150 40% 35%;
+    --muted: 130 20% 85%;
+    --muted-foreground: 160 30% 40%;
+    --accent: 140 30% 80%;
+    --accent-foreground: 160 50% 15%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 140 20% 80%;
+    --input: 140 20% 80%;
+    --ring: 150 40% 35%;
+  }
+
+  .theme-sunset {
+    /* Theme 4: Sunset Warm */
+    --background: 35 40% 96%;
+    --foreground: 20 60% 20%;
+    --card: 35 50% 98%;
+    --card-foreground: 20 60% 20%;
+    --popover: 35 50% 98%;
+    --popover-foreground: 20 60% 20%;
+    --primary: 15 70% 50%;
+    --primary-foreground: 35 40% 98%;
+    --secondary: 30 40% 85%;
+    --secondary-foreground: 20 60% 20%;
+    --muted: 30 40% 85%;
+    --muted-foreground: 20 40% 45%;
+    --accent: 25 50% 85%;
+    --accent-foreground: 20 60% 20%;
+    --destructive: 350 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 30% 80%;
+    --input: 30 30% 80%;
+    --ring: 15 70% 50%;
+  }
+
+  .theme-modern-blue {
+    /* Theme 5: Modern Blue */
+    --background: 210 50% 96%;
+    --foreground: 220 60% 15%;
+    --card: 210 60% 98%;
+    --card-foreground: 220 60% 15%;
+    --popover: 210 60% 98%;
+    --popover-foreground: 220 60% 15%;
+    --primary: 220 80% 50%;
+    --primary-foreground: 210 50% 98%;
+    --secondary: 210 40% 85%;
+    --secondary-foreground: 220 80% 50%;
+    --muted: 210 40% 85%;
+    --muted-foreground: 215 30% 45%;
+    --accent: 210 50% 80%;
+    --accent-foreground: 220 80% 50%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 30% 80%;
+    --input: 210 30% 80%;
+    --ring: 220 80% 50%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+
+  /* Global focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

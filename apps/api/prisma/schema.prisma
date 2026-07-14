@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String         @id @default(uuid())
+  email           String         @unique
+  username        String         @unique
+  passwordHash    String
+  isEmailVerified Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  roles           UserRole[]
+  sessions        Session[]
+  posts           Post[]
+  mediaAssets     MediaAsset[]
+  comments        Comment[]
+  postLikes       PostLike[]
+  bookmarks       Bookmark[]
+  auditLogs       AuditLog[]
+}
+
+model Role {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  description String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  users       UserRole[]
+}
+
+model UserRole {
+  userId String
+  roleId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  refreshToken String   @unique @db.VarChar(512)
+  expiresAt    DateTime
+  userAgent    String?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts       Post[]
+}
+
+model Genre {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts       Post[]
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts     Post[]
+}
+
+model MediaAsset {
+  id          String   @id @default(uuid())
+  url         String
+  publicId    String   @unique
+  altText     String?
+  uploaderId  String
+  postId      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  uploader    User     @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+  post        Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+}
+
+model Post {
+  id             String     @id @default(uuid())
+  title          String
+  slug           String     @unique
+  excerpt        String?    @db.Text
+  content        String     @db.LongText
+  coverImage     String?
+  authorId       String
+  categoryId     String?
+  genreId        String?
+  status         PostStatus @default(DRAFT)
+  publishedAt    DateTime?
+  readingTime    Int        @default(0)
+  viewCount      Int        @default(0)
+  likeCount      Int        @default(0)
+  commentCount   Int        @default(0)
+  isFeatured     Boolean    @default(false)
+  seoTitle       String?
+  seoDescription String?    @db.Text
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  author         User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category       Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  genre          Genre?       @relation(fields: [genreId], references: [id], onDelete: SetNull)
+  tags           Tag[]
+  mediaAssets    MediaAsset[]
+  comments       Comment[]
+  likes          PostLike[]
+  bookmarks      Bookmark[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  authorId  String
+  postId    String
+  parentId  String?
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentToComment")
+}
+
+model PostLike {
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+model Bookmark {
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  resource   String
+  resourceId String?
+  details    String?  @db.Text
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "apps/web/dist",
+  "builds": [
+    {
+      "src": "apps/web/package.json",
+      "use": "@vercel/static-build"
+    },
+    {
+      "src": "apps/api/src/vercel.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/apps/api/src/vercel.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/web/dist/$1"
+    }
+  ]
+}
