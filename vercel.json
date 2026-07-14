@@ -18,8 +18,11 @@
       "dest": "/apps/api/src/vercel.ts"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/apps/web/dist/$1"
+      "dest": "/apps/web/dist/index.html"
     }
   ]
 }
